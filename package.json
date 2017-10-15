@@ -1,0 +1,48 @@
+{
+  "name": "@thrift-shop/catalog",
+  "version": "0.0.1",
+  "description": "Maintains the list of available products and prices",
+  "main": "dist/server.js",
+  "scripts": {
+    "clean": "rimraf coverage/ dist/ node_modules/",
+    "build": "tsc",
+    "lint": "tslint src/**/*",
+    "codegen": "thrift-typescript --rootDir . --sourceDir ./thrift --outDir ./src/codegen",
+    "start": "node ./dist/server.js",
+    "test": "lab --coverage --coverage-path ./src/main --sourcemaps --transform node_modules/lab-transform-typescript ./src/test",
+    "test:watch": "watch 'npm test' ./src",
+    "coverage": "lab --coverage --sourcemaps -r console -o stdout -r html -o ./coverage/coverage.html ./dist/test",
+    "release:patch": "npm version patch && npm run release:publish",
+    "release:minor": "npm version minor && npm run release:publish",
+    "release:major": "npm version major && npm run release:publish",
+    "release:publish": "npm publish && git push --follow-tags"
+  },
+  "keywords": [
+    "thrift"
+  ],
+  "author": "Nick Nance",
+  "license": "ISC",
+  "devDependencies": {
+    "@creditkarma/thrift-typescript": "0.0.12",
+    "@types/code": "^4.0.3",
+    "@types/graphql": "^0.9.4",
+    "@types/hapi": "^16.1.10",
+    "@types/lab": "^11.1.0",
+    "@types/node": "^8.0.34",
+    "@types/rimraf": "^2.0.2",
+    "@types/thrift": "^0.10.3",
+    "lab": "^14.3.1",
+    "lab-transform-typescript": "^3.0.1",
+    "rimraf": "^2.6.2",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.3",
+    "watch": "^1.0.2"
+  },
+  "dependencies": {
+    "@creditkarma/graphql-loader": "^0.6.6",
+    "apollo-server-hapi": "^1.1.6",
+    "graphql": "^0.10.5",
+    "hapi": "^16.6.2",
+    "thrift": "^0.10.0"
+  }
+}
