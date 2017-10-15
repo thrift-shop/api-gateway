@@ -1,0 +1,6 @@
+type Item {
+    itemId: String
+    version: Int
+    name: String
+    description: String
+}
