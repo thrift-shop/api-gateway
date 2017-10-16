@@ -42,6 +42,7 @@
     "@creditkarma/graphql-loader": "^0.6.6",
     "apollo-server-hapi": "^1.1.6",
     "graphql": "^0.10.5",
+    "graphql-tools": "^2.5.0",
     "hapi": "^16.6.2",
     "thrift": "^0.10.0"
   }
