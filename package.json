@@ -29,6 +29,7 @@
     "@types/hapi": "^16.1.10",
     "@types/lab": "^11.1.0",
     "@types/node": "^8.0.34",
+    "@types/request": "^2.0.6",
     "@types/rimraf": "^2.0.2",
     "@types/thrift": "^0.10.3",
     "lab": "^14.3.1",
@@ -40,10 +41,12 @@
   },
   "dependencies": {
     "@creditkarma/graphql-loader": "^0.6.6",
+    "@creditkarma/thrift-client": "0.0.31",
     "apollo-server-hapi": "^1.1.6",
     "graphql": "^0.10.5",
     "graphql-tools": "^2.5.0",
     "hapi": "^16.6.2",
+    "request": "^2.83.0",
     "thrift": "^0.10.0"
   }
 }
