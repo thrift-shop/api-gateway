@@ -7,7 +7,7 @@ import {
 
 import * as request from 'request'
 
-import { CatalogService, Item } from '../codegen/catalog'
+import { CatalogService, Item } from '../../codegen/catalog'
 
 const requestClient: RequestInstance = request.defaults({
     timeout: 1000,
@@ -16,8 +16,6 @@ const connection: HttpConnection<CatalogService.Client> = fromRequest(requestCli
     hostName: 'localhost',
     port: 3010,
     path: '/',
-    protocol: 'binary',
-    transport: 'buffered',
 })
 const thriftClient: CatalogService.Client = createClient(CatalogService.Client, connection)
 

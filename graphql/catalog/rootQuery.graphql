@@ -1,3 +1,7 @@
 type RootQuery {
   allItems: [Item]
 }
+
+schema {
+  query: RootQuery
+}

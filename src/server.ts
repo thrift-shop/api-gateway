@@ -1,10 +1,9 @@
 import { loadSchema } from '@creditkarma/graphql-loader'
+import { executableSchemaFromModules } from '@creditkarma/graphql-loader'
 import { graphiqlHapi, graphqlHapi } from 'apollo-server-hapi'
 import { Server } from 'hapi'
 
-import { makeExecutableSchema } from 'graphql-tools'
-
-import { resolvers } from './resolvers/catalog'
+import { getCatalogModule } from './modules/catalog'
 
 const HOST = 'localhost'
 const PORT = 3000
@@ -16,10 +15,9 @@ server.connection({
     port: PORT,
 })
 
-loadSchema('./graphql/*.graphql')
-    .then((typeDefs) => {
-        const schema = makeExecutableSchema({ resolvers, typeDefs });
-
+Promise.all([getCatalogModule])
+    .then(executableSchemaFromModules)
+    .then((schema) => {
         return server.register([
             {
                 register: graphqlHapi,
@@ -40,7 +38,8 @@ loadSchema('./graphql/*.graphql')
                 },
             },
         ])
-    }).then((err) => {
+    })
+    .then((err) => {
         return server.start((startErr) => {
             if (startErr) {
                 throw startErr
