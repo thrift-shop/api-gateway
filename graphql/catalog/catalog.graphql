@@ -3,4 +3,5 @@ type Item {
     version: Int
     name: String
     description: String
+    status: ItemStatus
 }

@@ -1,0 +1,7 @@
+type RootQuery {
+  getInventory(itemId: String): ItemStatus
+}
+
+schema {
+  query: RootQuery
+}

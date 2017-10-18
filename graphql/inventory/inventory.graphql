@@ -1,0 +1,4 @@
+type ItemStatus {
+    itemId: String
+    qty: Int
+}

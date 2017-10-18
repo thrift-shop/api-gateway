@@ -5,6 +5,7 @@ import { GraphQLSchema } from 'graphql'
 import { Server } from 'hapi'
 
 import { getCatalogModule } from './modules/catalog'
+import { getInventoryModule } from './modules/inventory'
 
 const serverConnect = (server: Server) => (schema: GraphQLSchema) => {
     return new Promise((resolve, reject) => {
@@ -50,7 +51,7 @@ const startServer = (server: Server) => () => {
 
 const hapi = new Server()
 
-Promise.all([getCatalogModule])
+Promise.all([getCatalogModule, getInventoryModule])
     .then(executableSchemaFromModules)
     .then(serverConnect(hapi))
     .then(registerGQLRoutes(hapi))
