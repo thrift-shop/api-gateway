@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@creditkarma/graphql-loader": "^0.6.6",
-    "@creditkarma/thrift-client": "0.0.31",
+    "@creditkarma/thrift-client": "0.0.32",
     "apollo-server-hapi": "^1.1.6",
     "graphql": "^0.10.5",
     "hapi": "^16.6.2"
