@@ -1,0 +1,9 @@
+{
+  allItems {
+    itemId
+    name
+    status {
+      qty
+    }
+  }
+}

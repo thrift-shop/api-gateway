@@ -2,6 +2,11 @@ type RootQuery {
   getInventory(itemId: String): ItemStatus
 }
 
+type RootMutation {
+  reduceInventory(input: ReduceInventoryInput!): ItemStatus
+}
+
 schema {
   query: RootQuery
+  mutation: RootMutation
 }

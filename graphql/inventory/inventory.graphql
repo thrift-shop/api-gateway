@@ -2,3 +2,8 @@ type ItemStatus {
     itemId: String
     qty: Int
 }
+
+input ReduceInventoryInput {
+    itemId: String
+    qty: Int
+}

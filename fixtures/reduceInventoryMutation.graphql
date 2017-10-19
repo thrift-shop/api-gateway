@@ -1,0 +1,8 @@
+mutation {
+	reduceInventory(input: {
+    itemId: "1001",
+    qty: 1
+  }) {
+    qty
+  }
+}

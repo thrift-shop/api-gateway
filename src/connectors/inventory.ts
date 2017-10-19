@@ -20,3 +20,4 @@ const connection: HttpConnection<InventoryService.Client> = fromRequest(requestC
 const thriftClient: InventoryService.Client = createClient(InventoryService.Client, connection)
 
 export const getInventory = (itemId: string) => thriftClient.get(itemId)
+export const reduceInventory = (itemId: string, qty: number) => thriftClient.reduce(itemId, qty)

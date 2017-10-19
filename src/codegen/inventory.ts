@@ -85,6 +85,62 @@ export class ItemStatus {
         return;
     }
 }
+export interface IItemStatusUnavailableArgs {
+    message: string;
+}
+export class ItemStatusUnavailable {
+    public message: string;
+    constructor(args?: IItemStatusUnavailableArgs) {
+        if (args != null) {
+            if (args.message != null) {
+                this.message = args.message;
+            }
+        }
+    }
+    public write(output: thrift.TProtocol): void {
+        output.writeStructBegin("ItemStatusUnavailable");
+        if (this.message != null) {
+            output.writeFieldBegin("message", thrift.Thrift.Type.STRING, 1);
+            output.writeString(this.message);
+            output.writeFieldEnd();
+        }
+        output.writeFieldStop();
+        output.writeStructEnd();
+        return;
+    }
+    public read(input: thrift.TProtocol): void {
+        input.readStructBegin();
+        while (true) {
+            const ret: {
+                fname: string;
+                ftype: thrift.Thrift.Type;
+                fid: number;
+            } = input.readFieldBegin();
+            const ftype: thrift.Thrift.Type = ret.ftype;
+            const fid: number = ret.fid;
+            if (ftype === thrift.Thrift.Type.STOP) {
+                break;
+            }
+            switch (fid) {
+                case 1:
+                    if (ftype === thrift.Thrift.Type.STRING) {
+                        const value_3: string = input.readString();
+                        this.message = value_3;
+                    }
+                    else {
+                        input.skip(ftype);
+                    }
+                    break;
+                default: {
+                    input.skip(ftype);
+                }
+            }
+            input.readFieldEnd();
+        }
+        input.readStructEnd();
+        return;
+    }
+}
 export namespace InventoryService {
     export interface IGetArgsArgs {
         itemId: string;
@@ -125,8 +181,83 @@ export namespace InventoryService {
                 switch (fid) {
                     case -1:
                         if (ftype === thrift.Thrift.Type.STRING) {
-                            const value_3: string = input.readString();
-                            this.itemId = value_3;
+                            const value_4: string = input.readString();
+                            this.itemId = value_4;
+                        }
+                        else {
+                            input.skip(ftype);
+                        }
+                        break;
+                    default: {
+                        input.skip(ftype);
+                    }
+                }
+                input.readFieldEnd();
+            }
+            input.readStructEnd();
+            return;
+        }
+    }
+    export interface IReduceArgsArgs {
+        itemId: string;
+        qty: number;
+    }
+    export class ReduceArgs {
+        public itemId: string;
+        public qty: number;
+        constructor(args?: IReduceArgsArgs) {
+            if (args != null) {
+                if (args.itemId != null) {
+                    this.itemId = args.itemId;
+                }
+                if (args.qty != null) {
+                    this.qty = args.qty;
+                }
+            }
+        }
+        public write(output: thrift.TProtocol): void {
+            output.writeStructBegin("ReduceArgs");
+            if (this.itemId != null) {
+                output.writeFieldBegin("itemId", thrift.Thrift.Type.STRING, -1);
+                output.writeString(this.itemId);
+                output.writeFieldEnd();
+            }
+            if (this.qty != null) {
+                output.writeFieldBegin("qty", thrift.Thrift.Type.I32, -2);
+                output.writeI32(this.qty);
+                output.writeFieldEnd();
+            }
+            output.writeFieldStop();
+            output.writeStructEnd();
+            return;
+        }
+        public read(input: thrift.TProtocol): void {
+            input.readStructBegin();
+            while (true) {
+                const ret: {
+                    fname: string;
+                    ftype: thrift.Thrift.Type;
+                    fid: number;
+                } = input.readFieldBegin();
+                const ftype: thrift.Thrift.Type = ret.ftype;
+                const fid: number = ret.fid;
+                if (ftype === thrift.Thrift.Type.STOP) {
+                    break;
+                }
+                switch (fid) {
+                    case -1:
+                        if (ftype === thrift.Thrift.Type.STRING) {
+                            const value_5: string = input.readString();
+                            this.itemId = value_5;
+                        }
+                        else {
+                            input.skip(ftype);
+                        }
+                        break;
+                    case -2:
+                        if (ftype === thrift.Thrift.Type.I32) {
+                            const value_6: number = input.readI32();
+                            this.qty = value_6;
                         }
                         else {
                             input.skip(ftype);
@@ -144,13 +275,18 @@ export namespace InventoryService {
     }
     export interface IGetResultArgs {
         success?: ItemStatus;
+        unavailabe?: ItemStatusUnavailable;
     }
     export class GetResult {
         public success: ItemStatus;
+        public unavailabe: ItemStatusUnavailable;
         constructor(args?: IGetResultArgs) {
             if (args != null) {
                 if (args.success != null) {
                     this.success = args.success;
+                }
+                if (args.unavailabe != null) {
+                    this.unavailabe = args.unavailabe;
                 }
             }
         }
@@ -159,6 +295,11 @@ export namespace InventoryService {
             if (this.success != null) {
                 output.writeFieldBegin("success", thrift.Thrift.Type.STRUCT, 0);
                 this.success.write(output);
+                output.writeFieldEnd();
+            }
+            if (this.unavailabe != null) {
+                output.writeFieldBegin("unavailabe", thrift.Thrift.Type.STRUCT, 1);
+                this.unavailabe.write(output);
                 output.writeFieldEnd();
             }
             output.writeFieldStop();
@@ -181,9 +322,96 @@ export namespace InventoryService {
                 switch (fid) {
                     case 0:
                         if (ftype === thrift.Thrift.Type.STRUCT) {
-                            const value_4: ItemStatus = new ItemStatus();
-                            value_4.read(input);
-                            this.success = value_4;
+                            const value_7: ItemStatus = new ItemStatus();
+                            value_7.read(input);
+                            this.success = value_7;
+                        }
+                        else {
+                            input.skip(ftype);
+                        }
+                        break;
+                    case 1:
+                        if (ftype === thrift.Thrift.Type.STRUCT) {
+                            const value_8: ItemStatusUnavailable = new ItemStatusUnavailable();
+                            value_8.read(input);
+                            this.unavailabe = value_8;
+                        }
+                        else {
+                            input.skip(ftype);
+                        }
+                        break;
+                    default: {
+                        input.skip(ftype);
+                    }
+                }
+                input.readFieldEnd();
+            }
+            input.readStructEnd();
+            return;
+        }
+    }
+    export interface IReduceResultArgs {
+        success?: ItemStatus;
+        unavailabe?: ItemStatusUnavailable;
+    }
+    export class ReduceResult {
+        public success: ItemStatus;
+        public unavailabe: ItemStatusUnavailable;
+        constructor(args?: IReduceResultArgs) {
+            if (args != null) {
+                if (args.success != null) {
+                    this.success = args.success;
+                }
+                if (args.unavailabe != null) {
+                    this.unavailabe = args.unavailabe;
+                }
+            }
+        }
+        public write(output: thrift.TProtocol): void {
+            output.writeStructBegin("ReduceResult");
+            if (this.success != null) {
+                output.writeFieldBegin("success", thrift.Thrift.Type.STRUCT, 0);
+                this.success.write(output);
+                output.writeFieldEnd();
+            }
+            if (this.unavailabe != null) {
+                output.writeFieldBegin("unavailabe", thrift.Thrift.Type.STRUCT, 1);
+                this.unavailabe.write(output);
+                output.writeFieldEnd();
+            }
+            output.writeFieldStop();
+            output.writeStructEnd();
+            return;
+        }
+        public read(input: thrift.TProtocol): void {
+            input.readStructBegin();
+            while (true) {
+                const ret: {
+                    fname: string;
+                    ftype: thrift.Thrift.Type;
+                    fid: number;
+                } = input.readFieldBegin();
+                const ftype: thrift.Thrift.Type = ret.ftype;
+                const fid: number = ret.fid;
+                if (ftype === thrift.Thrift.Type.STOP) {
+                    break;
+                }
+                switch (fid) {
+                    case 0:
+                        if (ftype === thrift.Thrift.Type.STRUCT) {
+                            const value_9: ItemStatus = new ItemStatus();
+                            value_9.read(input);
+                            this.success = value_9;
+                        }
+                        else {
+                            input.skip(ftype);
+                        }
+                        break;
+                    case 1:
+                        if (ftype === thrift.Thrift.Type.STRUCT) {
+                            const value_10: ItemStatusUnavailable = new ItemStatusUnavailable();
+                            value_10.read(input);
+                            this.unavailabe = value_10;
                         }
                         else {
                             input.skip(ftype);
@@ -230,10 +458,33 @@ export namespace InventoryService {
                 this.send_get(itemId, requestId);
             });
         }
+        public reduce(itemId: string, qty: number): Promise<ItemStatus> {
+            const requestId: number = this.incrementSeqId();
+            return new Promise<ItemStatus>((resolve, reject): void => {
+                this._reqs[requestId] = (error, result) => {
+                    delete this._reqs[requestId];
+                    if (error != null) {
+                        reject(error);
+                    }
+                    else {
+                        resolve(result);
+                    }
+                };
+                this.send_reduce(itemId, qty, requestId);
+            });
+        }
         public send_get(itemId: string, requestId: number): void {
             const output: thrift.TProtocol = new this.protocol(this.output);
             output.writeMessageBegin("get", thrift.Thrift.MessageType.CALL, requestId);
             const args: GetArgs = new GetArgs({ itemId });
+            args.write(output);
+            output.writeMessageEnd();
+            return this.output.flush();
+        }
+        public send_reduce(itemId: string, qty: number, requestId: number): void {
+            const output: thrift.TProtocol = new this.protocol(this.output);
+            output.writeMessageBegin("reduce", thrift.Thrift.MessageType.CALL, requestId);
+            const args: ReduceArgs = new ReduceArgs({ itemId, qty });
             args.write(output);
             output.writeMessageEnd();
             return this.output.flush();
@@ -250,6 +501,9 @@ export namespace InventoryService {
             const result: GetResult = new GetResult();
             result.read(input);
             input.readMessageEnd();
+            if (result.unavailabe != null) {
+                return callback(result.unavailabe);
+            }
             if (result.success != null) {
                 return callback(undefined, result.success);
             }
@@ -257,9 +511,32 @@ export namespace InventoryService {
                 return callback(new thrift.Thrift.TApplicationException(thrift.Thrift.TApplicationExceptionType.UNKNOWN, "get failed: unknown result"));
             }
         }
+        public recv_reduce(input: thrift.TProtocol, mtype: thrift.Thrift.MessageType, rseqid: number): void {
+            const noop = (): any => null;
+            const callback = this._reqs[rseqid] || noop;
+            if (mtype === thrift.Thrift.MessageType.EXCEPTION) {
+                const x: thrift.Thrift.TApplicationException = new thrift.Thrift.TApplicationException();
+                x.read(input);
+                input.readMessageEnd();
+                return callback(x);
+            }
+            const result: ReduceResult = new ReduceResult();
+            result.read(input);
+            input.readMessageEnd();
+            if (result.unavailabe != null) {
+                return callback(result.unavailabe);
+            }
+            if (result.success != null) {
+                return callback(undefined, result.success);
+            }
+            else {
+                return callback(new thrift.Thrift.TApplicationException(thrift.Thrift.TApplicationExceptionType.UNKNOWN, "reduce failed: unknown result"));
+            }
+        }
     }
     export interface IHandler<Context> {
         get: (itemId: string, context?: Context) => ItemStatus | Promise<ItemStatus>;
+        reduce: (itemId: string, qty: number, context?: Context) => ItemStatus | Promise<ItemStatus>;
     }
     export class Processor<Context> {
         public _handler: IHandler<Context>;
@@ -278,6 +555,9 @@ export namespace InventoryService {
             switch (methodName) {
                 case "process_get": {
                     return this.process_get(rseqid, input, output, context);
+                }
+                case "process_reduce": {
+                    return this.process_reduce(rseqid, input, output, context);
                 }
                 default: {
                     input.skip(thrift.Thrift.Type.STRUCT);
@@ -309,12 +589,58 @@ export namespace InventoryService {
                 output.writeMessageEnd();
                 output.flush();
             }).catch((err: Error): void => {
-                const result: thrift.Thrift.TApplicationException = new thrift.Thrift.TApplicationException(thrift.Thrift.TApplicationExceptionType.UNKNOWN, err.message);
-                output.writeMessageBegin("get", thrift.Thrift.MessageType.EXCEPTION, seqid);
+                if (err instanceof ItemStatusUnavailable) {
+                    const result: GetResult = new GetResult({ unavailabe: err });
+                    output.writeMessageBegin("get", thrift.Thrift.MessageType.REPLY, seqid);
+                    result.write(output);
+                    output.writeMessageEnd();
+                    output.flush();
+                    return;
+                }
+                else {
+                    const result: thrift.Thrift.TApplicationException = new thrift.Thrift.TApplicationException(thrift.Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+                    output.writeMessageBegin("get", thrift.Thrift.MessageType.EXCEPTION, seqid);
+                    result.write(output);
+                    output.writeMessageEnd();
+                    output.flush();
+                    return;
+                }
+            });
+        }
+        public process_reduce(seqid: number, input: thrift.TProtocol, output: thrift.TProtocol, context?: Context): void {
+            const args = new ReduceArgs();
+            args.read(input);
+            input.readMessageEnd();
+            new Promise<ItemStatus>((resolve, reject): void => {
+                try {
+                    resolve(this._handler.reduce(args.itemId, args.qty, context));
+                }
+                catch (err) {
+                    reject(err);
+                }
+            }).then((data: ItemStatus): void => {
+                const result: ReduceResult = new ReduceResult({ success: data });
+                output.writeMessageBegin("reduce", thrift.Thrift.MessageType.REPLY, seqid);
                 result.write(output);
                 output.writeMessageEnd();
                 output.flush();
-                return;
+            }).catch((err: Error): void => {
+                if (err instanceof ItemStatusUnavailable) {
+                    const result: ReduceResult = new ReduceResult({ unavailabe: err });
+                    output.writeMessageBegin("reduce", thrift.Thrift.MessageType.REPLY, seqid);
+                    result.write(output);
+                    output.writeMessageEnd();
+                    output.flush();
+                    return;
+                }
+                else {
+                    const result: thrift.Thrift.TApplicationException = new thrift.Thrift.TApplicationException(thrift.Thrift.TApplicationExceptionType.UNKNOWN, err.message);
+                    output.writeMessageBegin("reduce", thrift.Thrift.MessageType.EXCEPTION, seqid);
+                    result.write(output);
+                    output.writeMessageEnd();
+                    output.flush();
+                    return;
+                }
             });
         }
     }
