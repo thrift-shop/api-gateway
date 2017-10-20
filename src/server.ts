@@ -10,8 +10,8 @@ import { getInventoryModule } from './modules/inventory'
 const serverConnect = (server: Server) => (schema: GraphQLSchema) => {
     return new Promise((resolve, reject) => {
         server.connection({
-            host: 'localhost',
-            port: 3000,
+            host: '0.0.0.0',
+            port: process.env.PORT || 3000,
         })
         resolve(schema)
     })

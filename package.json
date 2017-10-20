@@ -1,5 +1,5 @@
 {
-  "name": "@thrift-shop/catalog",
+  "name": "@thrift-shop/api",
   "version": "0.0.1",
   "description": "Maintains the list of available products and prices",
   "main": "dist/server.js",
