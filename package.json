@@ -32,6 +32,7 @@
     "@types/lab": "^11.1.0",
     "@types/node": "^8.0.34",
     "@types/rimraf": "^2.0.2",
+    "idl": "^3.1.9",
     "lab": "^14.3.1",
     "lab-transform-typescript": "^3.0.1",
     "rimraf": "^2.6.2",
