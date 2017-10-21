@@ -4,14 +4,15 @@
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
 */
 import * as thrift from "thrift";
+export type ItemID = string;
 export interface IItemArgs {
-    itemId: string;
+    itemId: ItemID;
     version: number;
     name: string;
     description?: string;
 }
 export class Item {
-    public itemId: string;
+    public itemId: ItemID;
     public version: number;
     public name: string;
     public description: string;
