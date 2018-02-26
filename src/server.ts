@@ -19,6 +19,22 @@ const serverConnect = (server: Server) => (schema: GraphQLSchema): Promise<Graph
 
 const registerGQLRoutes = (server: Server) => (schema: GraphQLSchema) => {
     return server.register([{
+        register: require('good'),
+        options: {
+            ops: {
+                interval: 1000,
+            },
+            reporters: {
+                myConsoleReporter: [{
+                    module: 'good-squeeze',
+                    name: 'Squeeze',
+                    args: [{ log: '*', response: '*' }],
+                }, {
+                    module: 'good-console',
+                }, 'stdout'],
+            },
+        },
+    }, {
         register: graphqlHapi,
         options: {
             path: '/graphql',
