@@ -1,3 +1,4 @@
+import { config } from '@creditkarma/dynamic-config'
 import { loadSchema } from '@creditkarma/graphql-loader'
 import { executableSchemaFromModules } from '@creditkarma/graphql-loader'
 import { graphiqlHapi, graphqlHapi } from 'apollo-server-hapi'
@@ -8,27 +9,30 @@ import { getCatalogModule } from './modules/catalog'
 import { getInventoryModule } from './modules/inventory'
 
 const serverConnect = (server: Server) => (schema: GraphQLSchema): Promise<GraphQLSchema> => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         server.connection({
             host: '0.0.0.0',
-            port: process.env.PORT || 3000,
+            port: await config().getWithDefault('port', process.env.PORT || 3000),
         })
         resolve(schema)
     })
 }
 
-const registerGQLRoutes = (server: Server) => (schema: GraphQLSchema) => {
+const registerGQLRoutes = (server: Server) => async (schema: GraphQLSchema) => {
     return server.register([{
         register: require('good'),
         options: {
-            ops: {
+            ops: await config().getWithDefault('goodOps', {
                 interval: 1000,
-            },
+            }),
             reporters: {
                 myConsoleReporter: [{
                     module: 'good-squeeze',
                     name: 'Squeeze',
-                    args: [{ log: '*', response: '*' }],
+                    args: await config().getWithDefault('consoleReporter.args', [{
+                        log: '*',
+                        response: '*',
+                    }]),
                 }, {
                     module: 'good-console',
                 }, 'stdout'],
@@ -59,7 +63,7 @@ const startServer = (server: Server) => () => {
         if (err) {
             throw err
         }
-        server.log(`Server running at: ${server.info ? server.info.uri : 'UNKOWN'}`)
+        server.log('info', `Server running at: ${server.info ? server.info.uri : 'UNKOWN'}`)
     })
 }
 

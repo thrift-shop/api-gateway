@@ -47,6 +47,7 @@
     "watch": "^1.0.2"
   },
   "dependencies": {
+    "@creditkarma/dynamic-config": "^0.4.3",
     "@creditkarma/graphql-loader": "^0.6.6",
     "@creditkarma/thrift-client": "^0.4.3",
     "@creditkarma/thrift-server-core": "^0.4.3",
