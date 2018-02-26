@@ -1,6 +1,6 @@
 import {
     createClient,
-    fromRequest,
+    // fromRequest,
     HttpConnection,
     RequestInstance,
 } from '@creditkarma/thrift-client'
@@ -19,8 +19,8 @@ const clientAddr = {
 const requestClient: RequestInstance = request.defaults({
     timeout: 1000,
 })
-const connection: HttpConnection<InventoryService.Client> = fromRequest(requestClient, clientAddr)
-const thriftClient: InventoryService.Client = createClient(InventoryService.Client, connection)
+// const connection: HttpConnection<InventoryService.Client> = fromRequest(requestClient, clientAddr)
+const thriftClient: InventoryService.Client = createClient(InventoryService.Client, clientAddr)
 
 export const getInventory = (itemId: string) => thriftClient.get(itemId)
 export const reduceInventory = (itemId: string, qty: number) => thriftClient.reduce(itemId, qty)

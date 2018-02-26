@@ -1,6 +1,6 @@
 import {
     createClient,
-    fromRequest,
+    // fromRequest,
     HttpConnection,
     RequestInstance,
 } from '@creditkarma/thrift-client'
@@ -21,7 +21,7 @@ const clientAddr = {
 const requestClient: RequestInstance = request.defaults({
     timeout: 1000,
 })
-const connection: HttpConnection<CatalogService.Client> = fromRequest(requestClient, clientAddr)
-const thriftClient: CatalogService.Client = createClient(CatalogService.Client, connection)
+// const connection: HttpConnection<CatalogService.Client> = fromRequest(requestClient, clientAddr)
+const thriftClient: CatalogService.Client = createClient(CatalogService.Client, clientAddr)
 
 export const allItems = () => thriftClient.getAll()

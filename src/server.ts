@@ -7,7 +7,7 @@ import { Server } from 'hapi'
 import { getCatalogModule } from './modules/catalog'
 import { getInventoryModule } from './modules/inventory'
 
-const serverConnect = (server: Server) => (schema: GraphQLSchema) => {
+const serverConnect = (server: Server) => (schema: GraphQLSchema): Promise<GraphQLSchema> => {
     return new Promise((resolve, reject) => {
         server.connection({
             host: '0.0.0.0',
@@ -18,26 +18,24 @@ const serverConnect = (server: Server) => (schema: GraphQLSchema) => {
 }
 
 const registerGQLRoutes = (server: Server) => (schema: GraphQLSchema) => {
-    return server.register([
-        {
-            register: graphqlHapi,
-            options: {
-                path: '/graphql',
-                graphqlOptions: { schema },
-                route: {
-                    cors: true,
-                },
-            },
-        }, {
-            register: graphiqlHapi,
-            options: {
-                path: '/',
-                graphiqlOptions: {
-                    endpointURL: '/graphql',
-                },
+    return server.register([{
+        register: graphqlHapi,
+        options: {
+            path: '/graphql',
+            graphqlOptions: { schema },
+            route: {
+                cors: true,
             },
         },
-    ])
+    }, {
+        register: graphiqlHapi,
+        options: {
+            path: '/',
+            graphiqlOptions: {
+                endpointURL: '/graphql',
+            },
+        },
+    }])
 }
 
 const startServer = (server: Server) => () => {
@@ -45,7 +43,7 @@ const startServer = (server: Server) => () => {
         if (err) {
             throw err
         }
-        console.log(`Server running at: ${server.info ? server.info.uri : 'UNKOWN'}`)
+        server.log(`Server running at: ${server.info ? server.info.uri : 'UNKOWN'}`)
     })
 }
 
