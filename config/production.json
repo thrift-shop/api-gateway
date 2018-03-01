@@ -1,0 +1,9 @@
+{
+    "consoleReporter": {
+        "args": {
+            "_source": "consul",
+            "_key": "gateway/consoleReporter",
+            "_type": "object"
+        }
+    }
+}
