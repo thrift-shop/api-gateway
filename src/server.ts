@@ -25,6 +25,7 @@ const registerGQLRoutes = (server: Server) => async (schema: GraphQLSchema) => {
         await plugins.good(),
         plugins.graphql(schema),
         plugins.graphiql,
+        plugins.zipkin,
     ])
 }
 

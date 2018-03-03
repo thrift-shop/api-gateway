@@ -58,6 +58,8 @@
     "graphql": "^0.10.5",
     "graphql-tools": "^0.11.0",
     "hapi": "^16.6.2",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "zipkin": "^0.12.0",
+    "zipkin-instrumentation-hapi": "^0.12.0"
   }
 }
