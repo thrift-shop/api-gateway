@@ -5,6 +5,8 @@ import { graphiqlHapi, graphqlHapi } from 'apollo-server-hapi'
 import { GraphQLSchema } from 'graphql'
 import { Server } from 'hapi'
 
+import * as plugins from './plugins'
+
 import { getCatalogModule } from './modules/catalog'
 import { getInventoryModule } from './modules/inventory'
 
@@ -19,43 +21,11 @@ const serverConnect = (server: Server) => (schema: GraphQLSchema): Promise<Graph
 }
 
 const registerGQLRoutes = (server: Server) => async (schema: GraphQLSchema) => {
-    return server.register([{
-        register: require('good'),
-        options: {
-            ops: await config().getWithDefault('goodOps', {
-                interval: 1000,
-            }),
-            reporters: {
-                myConsoleReporter: [{
-                    module: 'good-squeeze',
-                    name: 'Squeeze',
-                    args: await config().getWithDefault('consoleReporter.args', [{
-                        log: '*',
-                        response: '*',
-                    }]),
-                }, {
-                    module: 'good-console',
-                }, 'stdout'],
-            },
-        },
-    }, {
-        register: graphqlHapi,
-        options: {
-            path: '/graphql',
-            graphqlOptions: { schema },
-            route: {
-                cors: true,
-            },
-        },
-    }, {
-        register: graphiqlHapi,
-        options: {
-            path: '/',
-            graphiqlOptions: {
-                endpointURL: '/graphql',
-            },
-        },
-    }])
+    return server.register([
+        await plugins.good(),
+        plugins.graphql(schema),
+        plugins.graphiql,
+    ])
 }
 
 const startServer = (server: Server) => () => {
