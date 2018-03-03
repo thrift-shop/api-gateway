@@ -1,6 +1,5 @@
 import {
     createClient,
-    // fromRequest,
     HttpConnection,
     RequestInstance,
 } from '@creditkarma/thrift-client'
@@ -12,10 +11,10 @@ import * as request from 'request'
 import { InventoryService, ItemStatus } from '../codegen/inventory'
 
 const getClient = async () => {
-    const envAddr = process.env.INVENTORYADDR
+    const envAddr = parseInt(process.env.INVENTORYADDR || '3020', 2)
     const clientAddr = {
         hostName: await config().getWithDefault<string>('inventory.hostName', '0.0.0.0'),
-        port: await config().getWithDefault<number>('inventory.port', 3020),
+        port: await config().getWithDefault<number>('inventory.port', envAddr),
         requestOptions: await config().get<object>('inventory.requestOptions'),
         path: '/',
     }

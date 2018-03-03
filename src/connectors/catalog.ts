@@ -1,6 +1,5 @@
 import {
     createClient,
-    // fromRequest,
     HttpConnection,
     RequestInstance,
 } from '@creditkarma/thrift-client'
@@ -14,10 +13,10 @@ import { CatalogService, Item } from '../codegen/catalog'
 export { Item } from '../codegen/catalog'
 
 export const getClient = async () => {
-    const envAddr = process.env.CATALOGADDR
+    const envAddr = parseInt(process.env.CATALOGADDR || '3010', 2)
     const clientAddr = {
         hostName: await config().getWithDefault<string>('catalog.hostName', '0.0.0.0'),
-        port: await config().getWithDefault<number>('catalog.port', 3010),
+        port: await config().getWithDefault<number>('catalog.port', envAddr),
         requestOptions: await config().get<object>('catalog.requestOptions'),
         path: '/',
     }
