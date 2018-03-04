@@ -1,0 +1,20 @@
+{
+    "time": "2017-10-21T04:58:13.884Z",
+    "version": 1508561893884,
+    "remotes": {
+        "github.com/thrift-shop/catalog": {
+            "time": 1508560857562,
+            "version": 1508560857562,
+            "shasums": {
+                "catalog.thrift": "7c1b10640af4144400b156cbed2bb337b1b30dd1"
+            }
+        },
+        "github.com/thrift-shop/inventory": {
+            "time": 1508561893884,
+            "version": 1508561893884,
+            "shasums": {
+                "inventory.thrift": "8328cfed0ea792dd776d721e85ef25ae1fde58e5"
+            }
+        }
+    }
+}

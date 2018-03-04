@@ -1,32 +1,34 @@
 import { IGraphQLModule, loadDocument } from '@creditkarma/graphql-loader'
 
-import * as connector from '../connectors/inventory'
+import {default as inventoryConnector} from '../connectors/inventory'
 
 interface IGetInventoryArgs {
     itemId: string
 }
-const getInventory = (obj: {}, args: IGetInventoryArgs) =>
-    connector.getInventory(args.itemId)
-
 interface IReduceInventoryArgs {
     input: {
         itemId: string,
         qty: number,
     },
 }
-const reduceInventory = (obj: {}, args: IReduceInventoryArgs) =>
-    connector.reduceInventory(args.input.itemId, args.input.qty)
-
-const resolvers = {
-    RootQuery: {
-        getInventory,
-    },
-    RootMutation: {
-        reduceInventory,
-    },
-}
-
 export const getInventoryModule = async (): Promise<IGraphQLModule> => {
     const document = await loadDocument('./graphql/inventory/*.graphql')
+    const connector = await inventoryConnector()
+
+    const getInventory = (obj: {}, args: IGetInventoryArgs, context: any) =>
+        connector.getInventory(args.itemId, context)
+
+    const reduceInventory = (obj: {}, args: IReduceInventoryArgs) =>
+        connector.reduceInventory(args.input.itemId, args.input.qty)
+
+    const resolvers = {
+        RootQuery: {
+            getInventory,
+        },
+        RootMutation: {
+            reduceInventory,
+        },
+    }
+
     return { document, resolvers }
 }

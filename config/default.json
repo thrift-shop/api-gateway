@@ -1,0 +1,25 @@
+{
+    "catalog": {
+        "hostName": "0.0.0.0",
+        "port": 3010,
+        "requestOptions": {
+            "timeout": 1000
+        }
+
+    },
+    "inventory": {
+        "hostName": "0.0.0.0",
+        "port": 3020,
+        "requestOptions": {
+            "timeout": 1000
+        }
+    },
+    "consoleReporter": {
+        "args": [
+            { "log": "*", "response": "*" }
+        ]
+    },
+    "goodOps": {
+        "interval": 1000
+    }
+}

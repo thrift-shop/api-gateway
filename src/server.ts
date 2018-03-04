@@ -1,42 +1,39 @@
+import { config } from '@creditkarma/dynamic-config'
 import { loadSchema } from '@creditkarma/graphql-loader'
 import { executableSchemaFromModules } from '@creditkarma/graphql-loader'
 import { graphiqlHapi, graphqlHapi } from 'apollo-server-hapi'
 import { GraphQLSchema } from 'graphql'
-import { Server } from 'hapi'
+import { Request, Server } from 'hapi'
+
+import * as plugins from './plugins'
 
 import { getCatalogModule } from './modules/catalog'
 import { getInventoryModule } from './modules/inventory'
 
-const serverConnect = (server: Server) => (schema: GraphQLSchema) => {
-    return new Promise((resolve, reject) => {
+const serverConnect = (server: Server) => (schema: GraphQLSchema): Promise<GraphQLSchema> => {
+    return new Promise(async (resolve, reject) => {
         server.connection({
             host: '0.0.0.0',
-            port: process.env.PORT || 3000,
+            port: await config().getWithDefault('port', process.env.PORT || 3000),
         })
         resolve(schema)
     })
 }
 
-const registerGQLRoutes = (server: Server) => (schema: GraphQLSchema) => {
+const graphqlOptions = (schema: GraphQLSchema) => (request: Request) => ({
+    pretty: true,
+    schema,
+    context: {
+        headers: request.headers,
+    },
+})
+
+const registerGQLRoutes = (server: Server) => async (schema: GraphQLSchema) => {
+    const options = graphqlOptions(schema)
     return server.register([
-        {
-            register: graphqlHapi,
-            options: {
-                path: '/graphql',
-                graphqlOptions: { schema },
-                route: {
-                    cors: true,
-                },
-            },
-        }, {
-            register: graphiqlHapi,
-            options: {
-                path: '/',
-                graphiqlOptions: {
-                    endpointURL: '/graphql',
-                },
-            },
-        },
+        await plugins.good(),
+        plugins.graphql(options),
+        plugins.graphiql,
     ])
 }
 
@@ -45,7 +42,7 @@ const startServer = (server: Server) => () => {
         if (err) {
             throw err
         }
-        console.log(`Server running at: ${server.info ? server.info.uri : 'UNKOWN'}`)
+        server.log('info', `Server running at: ${server.info ? server.info.uri : 'UNKOWN'}`)
     })
 }
 
