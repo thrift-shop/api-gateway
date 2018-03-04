@@ -2,6 +2,7 @@ import { config } from '@creditkarma/dynamic-config'
 import { GraphQLSchema } from 'graphql'
 
 import { graphiqlHapi, graphqlHapi, IRegister } from 'apollo-server-hapi'
+import { Request } from 'hapi'
 
 export const good = async () => ({
     register: require('good'),
@@ -19,11 +20,12 @@ export const good = async () => ({
     },
 })
 
-export const graphql = (schema: GraphQLSchema) => ({
+export type GraphQLOptions = (request: Request) => {}
+export const graphql = (graphqlOptions: GraphQLOptions) => ({
     register: graphqlHapi,
     options: {
         path: '/graphql',
-        graphqlOptions: { schema },
+        graphqlOptions,
         route: {
             cors: true,
         },

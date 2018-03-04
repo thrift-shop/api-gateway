@@ -3,7 +3,7 @@ import { loadSchema } from '@creditkarma/graphql-loader'
 import { executableSchemaFromModules } from '@creditkarma/graphql-loader'
 import { graphiqlHapi, graphqlHapi } from 'apollo-server-hapi'
 import { GraphQLSchema } from 'graphql'
-import { Server } from 'hapi'
+import { Request, Server } from 'hapi'
 
 import * as plugins from './plugins'
 
@@ -20,10 +20,19 @@ const serverConnect = (server: Server) => (schema: GraphQLSchema): Promise<Graph
     })
 }
 
+const graphqlOptions = (schema: GraphQLSchema) => (request: Request) => ({
+    pretty: true,
+    schema,
+    context: {
+        headers: request.headers,
+    },
+})
+
 const registerGQLRoutes = (server: Server) => async (schema: GraphQLSchema) => {
+    const options = graphqlOptions(schema)
     return server.register([
         await plugins.good(),
-        plugins.graphql(schema),
+        plugins.graphql(options),
         plugins.graphiql,
     ])
 }
