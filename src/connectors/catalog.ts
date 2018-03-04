@@ -1,27 +1,36 @@
 import {
     createClient,
-    fromRequest,
     HttpConnection,
     RequestInstance,
 } from '@creditkarma/thrift-client'
 
+import { config } from '@creditkarma/dynamic-config'
+
 import * as request from 'request'
 
-import { CatalogService, Item } from '../codegen/catalog'
+import { getTracingHeaders } from './lib'
 
+import { CatalogService, Item } from '../codegen/catalog'
 export { Item } from '../codegen/catalog'
 
-const envAddr = process.env.CATALOGADDR
-const clientAddr = {
-    hostName: envAddr ? envAddr.split(':')[0] : '0.0.0.0',
-    port: envAddr ? Number.parseInt(envAddr.split(':')[1]) : 3010,
-    path: '/',
+export const getClient = async () => {
+    const envAddr = parseInt(process.env.CATALOGADDR || '3010', 2)
+    const clientAddr = {
+        hostName: await config().getWithDefault<string>('catalog.hostName', '0.0.0.0'),
+        port: await config().getWithDefault<number>('catalog.port', envAddr),
+        requestOptions: await config().get<object>('catalog.requestOptions'),
+        path: '/',
+    }
+
+    return createClient(CatalogService.Client, clientAddr)
 }
 
-const requestClient: RequestInstance = request.defaults({
-    timeout: 1000,
-})
-const connection: HttpConnection<CatalogService.Client> = fromRequest(requestClient, clientAddr)
-const thriftClient: CatalogService.Client = createClient(CatalogService.Client, connection)
-
-export const allItems = () => thriftClient.getAll()
+export default async () => {
+    const thriftClient = await getClient()
+    return {
+        allItems: (context: any) => {
+            const headers = getTracingHeaders(context)
+            return thriftClient.getAll({headers})
+        },
+    }
+}
