@@ -10,10 +10,10 @@ export const getCatalogModule = async (): Promise<IGraphQLModule> => {
 
     const resolvers = {
         RootQuery: {
-            allItems: catalog.allItems,
+            allItems: (obj: any, args: any, context: any) => catalog.allItems(context),
         },
         Item: {
-            status: (item: Item) => inventory.getInventory(item.itemId),
+            status: (item: Item, args: any, context: any) => inventory.getInventory(item.itemId, context),
         },
     }
 

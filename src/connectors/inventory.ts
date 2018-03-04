@@ -8,6 +8,8 @@ import { config } from '@creditkarma/dynamic-config'
 
 import * as request from 'request'
 
+import { getTracingHeaders } from './lib'
+
 import { InventoryService, ItemStatus } from '../codegen/inventory'
 
 const getClient = async () => {
@@ -25,7 +27,10 @@ const getClient = async () => {
 export default async () => {
     const thriftClient = await getClient()
     return {
-        getInventory: (itemId: string) => thriftClient.get(itemId),
+        getInventory: (itemId: string, context: any) => {
+            const headers = getTracingHeaders(context)
+            return thriftClient.get(itemId, {headers})
+        },
         reduceInventory: (itemId: string, qty: number) => thriftClient.reduce(itemId, qty),
     }
 }

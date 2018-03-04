@@ -8,8 +8,9 @@ import { config } from '@creditkarma/dynamic-config'
 
 import * as request from 'request'
 
-import { CatalogService, Item } from '../codegen/catalog'
+import { getTracingHeaders } from './lib'
 
+import { CatalogService, Item } from '../codegen/catalog'
 export { Item } from '../codegen/catalog'
 
 export const getClient = async () => {
@@ -27,6 +28,9 @@ export const getClient = async () => {
 export default async () => {
     const thriftClient = await getClient()
     return {
-        allItems: () => thriftClient.getAll(),
+        allItems: (context: any) => {
+            const headers = getTracingHeaders(context)
+            return thriftClient.getAll({headers})
+        },
     }
 }

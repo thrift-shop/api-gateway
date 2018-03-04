@@ -15,8 +15,8 @@ export const getInventoryModule = async (): Promise<IGraphQLModule> => {
     const document = await loadDocument('./graphql/inventory/*.graphql')
     const connector = await inventoryConnector()
 
-    const getInventory = (obj: {}, args: IGetInventoryArgs) =>
-        connector.getInventory(args.itemId)
+    const getInventory = (obj: {}, args: IGetInventoryArgs, context: any) =>
+        connector.getInventory(args.itemId, context)
 
     const reduceInventory = (obj: {}, args: IReduceInventoryArgs) =>
         connector.reduceInventory(args.input.itemId, args.input.qty)
